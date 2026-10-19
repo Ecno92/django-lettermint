@@ -72,9 +72,7 @@ def test_fail_silently_option_is_an_error(settings):
 
 def test_subclass_of_the_backend_is_checked(settings):
     settings.MAILERS = {
-        "default": {
-            "BACKEND": "tests.django_lettermint.test_checks.CustomLettermintBackend"
-        },
+        "default": {"BACKEND": "tests.test_checks.CustomLettermintBackend"},
     }
 
     assert [warning.id for warning in check_sending_token(None)] == ["lettermint.W001"]
@@ -84,7 +82,7 @@ def test_subclass_of_the_backend_is_checked(settings):
     "backend",
     [
         "does.not.exist.EmailBackend",
-        "tests.django_lettermint.test_checks.NotABackend",
+        "tests.test_checks.NotABackend",
     ],
 )
 def test_unknown_backends_are_ignored(settings, backend):
