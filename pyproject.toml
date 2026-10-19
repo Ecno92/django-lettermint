@@ -1,0 +1,57 @@
+[project]
+name = "django-lettermint"
+version = "0.1.0"
+description = "Django email backend that sends mail through Lettermint."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Therry van Neerven" }]
+requires-python = ">=3.12"
+dependencies = [
+    "django>=6.1",
+    "lettermint>=3.1.0",
+]
+keywords = ["django", "email", "lettermint", "transactional email"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 6.1",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Communications :: Email",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/Ecno92/django-lettermint"
+Issues = "https://github.com/Ecno92/django-lettermint/issues"
+Changelog = "https://github.com/Ecno92/django-lettermint/blob/main/CHANGELOG.md"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-django>=4.9.0",
+    "pytest-socket>=0.7.0",
+    "pytest-cov>=7.1.0",
+    "respx>=0.21.1",
+    "ruff>=0.8.2",
+]
+
+[build-system]
+requires = ["uv_build>=0.9.26,<0.10"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "--disable-socket"
+
+[tool.coverage.run]
+source = ["django_lettermint"]
+branch = true

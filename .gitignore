@@ -1,0 +1,7 @@
+__pycache__/
+*.py[oc]
+dist/
+.venv
+.coverage
+.pytest_cache
+.ruff_cache
