@@ -4,7 +4,13 @@ A Django email backend that sends mail through [Lettermint](https://lettermint.c
 
 Configured as the `default` mailer, everything Django sends goes through Lettermint: `send_mail()`, `EmailMessage.send()`, `mail_admins()`, and so on. Under another alias, it is used only when you pass `using="<alias>"`.
 
-It lives in `src/django_lettermint`, outside the `app` project package, and imports only `django` and `lettermint`. That keeps it ready to become the `django-lettermint` package, the same way `django-extensions` is imported as `django_extensions`.
+## Installation
+
+```bash
+pip install django-lettermint
+```
+
+It needs Django 6.1 or newer and Python 3.12 or newer.
 
 ## Configuration
 
@@ -15,8 +21,8 @@ MAILERS = {
     "default": {
         "BACKEND": "django_lettermint.backend.LettermintEmailBackend",
         "OPTIONS": {
-            "sending_token": env.str("LETTERMINT_SENDING_TOKEN", ""),
-            "route": env.str("LETTERMINT_ROUTE", ""),
+            "sending_token": os.environ["LETTERMINT_SENDING_TOKEN"],
+            "route": os.environ.get("LETTERMINT_ROUTE", ""),
         },
     },
 }
@@ -27,14 +33,6 @@ MAILERS = {
 | `sending_token` | `""` | Project sending token (`lm_…`). Sending without it raises `ImproperlyConfigured`. |
 | `route` | `""` | Route slug to send through. When it is blank, the project's default route is used. |
 | `timeout` | SDK default (30) | Optional. Request timeout in seconds, covering the whole request including the response body. |
-
-In this project only `ENVIRONMENT=production` uses Lettermint (see `src/app/settings.py`). Other environments use different backends:
-
-| Environment | Backend |
-| --- | --- |
-| Development | debug toolbar's mail panel |
-| Tests | locmem |
-| Anything else | console |
 
 ## Lettermint-specific options per message
 
@@ -110,10 +108,16 @@ When one call sends several messages and one fails, the messages before it were 
 - No per-message scheduling, tracking settings or sandbox results.
 - No webhooks yet, so delivery events are visible only in the Lettermint dashboard.
 
-## Notes for a future package
+## Roadmap
 
 - Per-message `lettermint_scheduled_at`, `lettermint_settings` (open and click tracking) and `lettermint_sandbox_result`.
 - Use `send_batch` when one `send_messages()` call gets many messages.
 - Map a `text/plain` alternative to `text` when the body is HTML.
 - Add `X-LM-Preserve-Message-ID` when a caller sets `Message-ID`, so mail threading keeps working.
-- Give the tests their own minimal settings instead of this project's `tests/app/settings.py`.
+
+## Development
+
+```bash
+make check  # ruff, and the tests with a 100% coverage gate
+make build  # sdist and wheel in dist/
+```
