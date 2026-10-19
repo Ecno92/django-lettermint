@@ -1,5 +1,3 @@
-"""Django email backend that sends through the Lettermint API."""
-
 import email.message
 import threading
 from collections.abc import Sequence

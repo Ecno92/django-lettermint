@@ -1,4 +1,4 @@
-.PHONY: check build
+.PHONY: check build publish publish-test
 
 check:  ## Lint, format check and tests with the 100% coverage gate
 	uv run ruff check .
@@ -9,3 +9,9 @@ build:  ## Build the sdist and wheel into dist/ and check their metadata
 	rm -rf dist
 	uv build
 	uv tool run twine check dist/*
+
+publish-test:
+	uvx twine upload --repository testpypi dist/*
+
+publish:
+	uvx twine upload --repository pypi dist/*

@@ -3,7 +3,7 @@ name = "django-lettermint"
 version = "0.1.0"
 description = "Django email backend that sends mail through Lettermint."
 readme = "README.md"
-license = "MIT"
+license = "MPL-2.0"
 license-files = ["LICENSE"]
 authors = [{ name = "Therry van Neerven" }]
 requires-python = ">=3.12"
@@ -21,8 +21,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
     "Topic :: Communications :: Email",
     "Typing :: Typed",
 ]

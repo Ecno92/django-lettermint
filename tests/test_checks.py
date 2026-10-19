@@ -1,5 +1,4 @@
 import pytest
-
 from django_lettermint.backend import LettermintEmailBackend
 from django_lettermint.checks import check_options, check_sending_token
 

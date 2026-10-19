@@ -4,7 +4,7 @@ from django.core.mail import InvalidMailer
 from django.utils.module_loading import import_string
 from lettermint import LettermintConfigError
 
-from .backend import LettermintEmailBackend
+from django_lettermint.backend import LettermintEmailBackend
 
 
 def _lettermint_backend(backend_path: str) -> type[LettermintEmailBackend] | None:

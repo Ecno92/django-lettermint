@@ -2,19 +2,21 @@
 
 A Django email backend that sends mail through [Lettermint](https://lettermint.co) using the official [`lettermint`](https://pypi.org/project/lettermint/) Python SDK.
 
-Configured as the `default` mailer, everything Django sends goes through Lettermint: `send_mail()`, `EmailMessage.send()`, `mail_admins()`, and so on. Under another alias, it is used only when you pass `using="<alias>"`.
+## Supported versions
 
-## Installation
+- Django 6.1
+- Python 3.12
+
+Other versions may work, but are not tested.
+
+
+## Configuration and Installation
 
 ```bash
 pip install django-lettermint
 ```
 
-It needs Django 6.1 or newer and Python 3.12 or newer.
-
-## Configuration
-
-Add `"django_lettermint"` to `INSTALLED_APPS` to get the system checks. Then configure it as a mailer in `MAILERS`. That setting is new in Django 6.1 and replaces `EMAIL_BACKEND`.
+Add `"django_lettermint"` to `INSTALLED_APPS`. Then configure it as a mailer in `MAILERS`.
 
 ```python
 MAILERS = {
@@ -61,18 +63,6 @@ message.lettermint_status  # "pending"
 | `extra_headers` | `headers` |
 | `attachments` (tuples, `MIMEPart`, `message/rfc822`) | `attachments`; the `Content-ID` becomes `content_id` |
 
-Django's own `message.message()` validates the subject and headers, so the backend keeps Django's behaviour:
-
-- `headers={"From": ..., "Reply-To": ...}` overrides `from_email` and `reply_to`.
-- A `Bcc` header, or a newline in the subject or a header value, raises `ValueError`.
-- Addresses are sent as given, with empty ones dropped. Lettermint validates them and rejects invalid ones with a `ValidationError`. A line break in a Bcc address raises `ValueError`.
-- The `Date` and `Message-ID` Django generates are not sent; Lettermint sets its own. A `Message-ID` you set in `headers` is sent.
-
-Lettermint has a few extra rules:
-
-- `To` and `Cc` header overrides raise `ValueError`, because Lettermint can't show other recipients than it delivers to.
-- A message needs at least one `to` recipient; Bcc-only messages raise `ValueError`.
-- Messages without any recipients are skipped, like Django's SMTP backend skips them.
 
 ## Handling failures
 
@@ -103,21 +93,8 @@ When one call sends several messages and one fails, the messages before it were 
 
 ## Limitations
 
+- A message needs at least one `to` recipient; Bcc-only messages raise `ValueError`.
 - One API request per message, sent synchronously. There is no batch sending (`/send/batch`) or background queue.
 - Only one HTML body and no other alternatives; a `text/plain` alternative next to an HTML body is rejected too.
 - No per-message scheduling, tracking settings or sandbox results.
 - No webhooks yet, so delivery events are visible only in the Lettermint dashboard.
-
-## Roadmap
-
-- Per-message `lettermint_scheduled_at`, `lettermint_settings` (open and click tracking) and `lettermint_sandbox_result`.
-- Use `send_batch` when one `send_messages()` call gets many messages.
-- Map a `text/plain` alternative to `text` when the body is HTML.
-- Add `X-LM-Preserve-Message-ID` when a caller sets `Message-ID`, so mail threading keeps working.
-
-## Development
-
-```bash
-make check  # ruff, and the tests with a 100% coverage gate
-make build  # sdist and wheel in dist/
-```

@@ -9,9 +9,8 @@ from django.core import mail
 from django.core.exceptions import ImproperlyConfigured
 from django.core.mail import EmailMessage, EmailMultiAlternatives, InvalidMailer
 from django.utils.deprecation import RemovedInDjango70Warning
-from lettermint import LettermintConfigError, ValidationError
-
 from django_lettermint.backend import LettermintEmailBackend, build_payload
+from lettermint import LettermintConfigError, ValidationError
 
 SEND_URL = "https://api.lettermint.co/v1/send"
 TOKEN = "lm_testtoken123"
