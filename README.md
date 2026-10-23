@@ -5,7 +5,7 @@ A Django email backend that sends mail through [Lettermint](https://lettermint.c
 ## Supported versions
 
 - Django 6.1
-- Python 3.12
+- Python 3.12, 3.13, 3.14
 
 Other versions may work, but are not tested.
 
